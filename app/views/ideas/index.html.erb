@@ -1,0 +1,14 @@
+<% @ideas.each do |idea| %>
+  <strong><%= idea.title %></strong>: <%= idea.body %><br>
+  <p><strong>Quality:</strong> <%= idea.quality %></p>
+  <button class="deleteIdea">Delete</button>
+  <button class="editIdea">Edit Idea</button><br>
+<% end %>
+
+<form>
+  <input type="text" placeholder="Title" id="newIdeaTitle">
+  <input type="text" placeholder="Body" id="newIdeaBody">
+  <input type="submit" value="Submit Idea" id="newIdea">
+</form>
+
+<%= link_to "New Idea", new_idea_path %>
