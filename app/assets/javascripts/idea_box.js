@@ -44,10 +44,10 @@ bindThumbsUp = function() {
       url: "/like",
       dataType: "json",
       data: {
-        "id": String(daddy)
+        "id": daddy
       }
 
-    }).then(console.log("Success"));
+    }).then();
   });
 };
 
@@ -68,7 +68,7 @@ bindThumbsDown = function() {
       url: "/dislike",
       dataType: "json",
       data: {
-        "id": String(daddy)
+        "id": daddy
       }
     });
   });
