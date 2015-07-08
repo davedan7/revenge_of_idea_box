@@ -5,10 +5,6 @@ class IdeasController < ApplicationController
     @ideas = Idea.all
   end
 
-  def new
-    @idea = Idea.new
-  end
-
   def create
     idea = Idea.new(idea_params)
     if idea.save
@@ -16,13 +12,22 @@ class IdeasController < ApplicationController
     else
       respond_with({:errors => idea.errors }, :status => 422, :location => ideas_path)
     end
+  end
 
-    # if idea.save
-    #   success = {:message => "Congrats! An idea was created!", :idea => idea}
-    #   respond_with(success, :status => 201, :location => idea_path(idea))
-    # else
-    #   respond_with({:errors => idea.errors }, :status => 422, :location => ideas_path)
-    # end
+  def edit
+  end
+
+  def update
+    idea = Idea.find(params[:id].to_i)
+    # binding.pry
+    idea.title = params[:title]
+    idea.body = params[:body]
+
+    if idea.save
+      respond_with idea, location: ""
+    else
+      respond_with({:errors => idea.errors }, :status => 422, :location => ideas_path)
+    end
   end
 
   def like
@@ -30,10 +35,8 @@ class IdeasController < ApplicationController
     case @idea.quality
     when "Swill"
       @idea.quality = "Plausible"
-      @idea.save!
     when "Plausible"
       @idea.quality = "Genius"
-      @idea.save!
     end
 
     if @idea.save
@@ -48,10 +51,10 @@ class IdeasController < ApplicationController
     case @idea.quality
     when "Genius"
       @idea.quality = "Plausible"
-      @idea.save!
+      # @idea.save!
     when "Plausible"
       @idea.quality = "Swill"
-      @idea.save!
+      # @idea.save!
     end
 
     if @idea.save

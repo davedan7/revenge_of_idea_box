@@ -5,6 +5,7 @@ $(document).ready(function() {
   bindDeleteIdea();
   bindThumbsUp();
   bindThumbsDown();
+  bindEditIdea();
 });
 
 // function populateIdeas () {
@@ -30,7 +31,6 @@ bindThumbsUp = function() {
   $('.thumbsUp').on('click', function(idea) {
     idea.preventDefault();
     var daddy = $(this).parents(".idea").data('id'); // ew
-    console.log(daddy);
     var currentQuality = $(this).siblings(".brother").children('.ideaQuality');
 
     if (currentQuality.html() == "Swill") {
@@ -70,24 +70,34 @@ bindThumbsDown = function() {
       data: {
         "id": String(daddy)
       }
-
-    }).then(updateLikeStatus());
+    });
   });
 };
 
-updateLikeStatus = function() {
-
-};
-
 bindEditIdea = function() {
-  $('.editIdea').on('click', function() {
+  $('#saveEditIdea').on('click', function(button) {
+    button.preventDefault();
+    // var $title = $(this).parents(".card-content").children(".ideaBody").html();
+    var $title = $('#editIdeaTitle').val();
+    var $body  = $('.editIdeaBody').val();
+    var $id = $(this).parents("#modal1").siblings(".allIdeas").children(".idea").data("id");
 
+    $.ajax({
+      method: "put", 
+      url: "/ideas/" + $id,
+      // dataType: "json",
+      data: {
+        title: $title, 
+        body: $body, 
+        id: $id
+      }
+    }).then(console.log(data));
   });
 };
 
 createIdea = function() {
   var $title = $('#newIdeaTitle').val();
-  var $body  = $('#newIdeaBody').val();
+  var $body  = $('.newIdeaBody').val();
 
   $.ajax({
     type: "POST", 
@@ -97,7 +107,6 @@ createIdea = function() {
       idea: {title: $title, body: $body}
     }
   }).then(function(data) {
-    // console.log(data);
     appendIdeaToDom(data);
   });
 };
@@ -111,7 +120,6 @@ deleteTheIdea = function(id) {
       "id": String(id),
     }
   }).then(function() {
-    // console.log(id);
     removeIdeaFromDom(id);
   });
 };
@@ -120,7 +128,7 @@ appendIdeaToDom = function(idea) {
   $id = idea.id;
   $title = idea.title;
   $body = idea.body;
-  $quality = "Swill"
+  $quality = "Swill";
 
   $('.allIdeas')
   .append(
