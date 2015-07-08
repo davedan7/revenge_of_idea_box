@@ -1,22 +1,93 @@
 $(document).ready(function() {
   // populateIdeas();
-  bindListeners();
+  $('.modal-trigger').leanModal();
+  bindCreateIdea();
+  bindDeleteIdea();
+  bindThumbsUp();
+  bindThumbsDown();
 });
 
 // function populateIdeas () {
 //   $.getJSON('/ideas');
 // }
 
-bindListeners = function() {
-  $('#newIdea').on('click', function(event) {
-    event.preventDefault();
-    createEvent();
+bindCreateIdea = function() {
+  $('#newIdea').on('click', function(idea) {
+    idea.preventDefault();
+    createIdea();
   });
 };
 
-createEvent = function() {
+bindDeleteIdea = function() {
+  $('.deleteIdea').on('click', function(idea) {
+    var daddy = $(this).parents(".idea").data('id'); // ew
+    idea.preventDefault();
+    deleteTheIdea(daddy);
+  });
+};
+
+bindThumbsUp = function() {
+  $('.thumbsUp').on('click', function(idea) {
+    idea.preventDefault();
+    var daddy = $(this).parents(".idea").data('id'); // ew
+    console.log(daddy);
+    var currentQuality = $(this).siblings(".brother").children('.ideaQuality');
+
+    if (currentQuality.html() == "Swill") {
+      currentQuality.text("Plausible");
+    } else if (currentQuality.html() == "Plausible") {
+      currentQuality.text("Genius");
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/like",
+      dataType: "json",
+      data: {
+        "id": String(daddy)
+      }
+
+    }).then(console.log("Success"));
+  });
+};
+
+bindThumbsDown = function() {
+  $('.thumbsDown').on('click', function(idea) {
+    idea.preventDefault();
+    var daddy = $(this).parents(".idea").data('id'); // ew
+    var currentQuality = $(this).siblings(".brother").children('.ideaQuality');
+
+    if (currentQuality.html() == "Genius") {
+      currentQuality.text("Plausible");
+    } else if (currentQuality.html() == "Plausible") {
+      currentQuality.text("Swill");
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/dislike",
+      dataType: "json",
+      data: {
+        "id": String(daddy)
+      }
+
+    }).then(updateLikeStatus());
+  });
+};
+
+updateLikeStatus = function() {
+
+};
+
+bindEditIdea = function() {
+  $('.editIdea').on('click', function() {
+
+  });
+};
+
+createIdea = function() {
   var $title = $('#newIdeaTitle').val();
-  var $body = $('#newIdeaBody').val();
+  var $body  = $('#newIdeaBody').val();
 
   $.ajax({
     type: "POST", 
@@ -26,6 +97,57 @@ createEvent = function() {
       idea: {title: $title, body: $body}
     }
   }).then(function(data) {
-    console.log(data);
+    // console.log(data);
+    appendIdeaToDom(data);
   });
 };
+
+deleteTheIdea = function(id) {
+  $.ajax({
+    type: "delete",
+    url: "/ideas/" + id,
+    dataType: "json",
+    data: {
+      "id": String(id),
+    }
+  }).then(function() {
+    // console.log(id);
+    removeIdeaFromDom(id);
+  });
+};
+
+appendIdeaToDom = function(idea) {
+  $id = idea.id;
+  $title = idea.title;
+  $body = idea.body;
+  $quality = "Swill"
+
+  $('.allIdeas')
+  .append(
+    "<div class='col s12 m6 idea' data-id=" + $id + ">" + 
+      "<div class='card blue-grey darken-1'>" + 
+        "<div class='card-content white-text'>" + 
+          "<span class='card-title'>" + $title + "</span>" + 
+          "<p><strong>Description:</strong><span class='ideaBody'> " + $body + "</span></p>" + 
+          "<p class='brother'><strong>Quality:</strong> <span class='ideaQuality'>" +  $quality + "</span></p>" + 
+          "<a href='' class='thumbsUp'>Like</a> " + 
+          "<a href='' class='thumbsDown'>Dislike</a>" + 
+        "</div>" + 
+        "<div class='card-action'>" + 
+          "<a href='' class='deleteIdea'>Delete</a>" + 
+          "<a href='' class='editIdea'>Edit Idea</a>" + 
+        "</div>" + 
+      "</div>" + 
+    "</div>"
+  );
+  bindDeleteIdea();
+  bindThumbsUp();
+  bindThumbsDown();
+};
+
+removeIdeaFromDom = function(id) {
+  $('[data-id=' + id + ']').remove();
+};
+
+
+

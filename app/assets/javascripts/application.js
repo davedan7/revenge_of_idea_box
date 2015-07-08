@@ -11,8 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require materialize-sprockets
 //= require jquery_ujs
-//= require foundation
 //= require_tree .
 
-$(function(){ $(document).foundation(); });

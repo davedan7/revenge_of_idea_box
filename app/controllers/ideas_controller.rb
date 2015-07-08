@@ -24,10 +24,48 @@ class IdeasController < ApplicationController
     #   respond_with({:errors => idea.errors }, :status => 422, :location => ideas_path)
     # end
   end
-  
-  def delete
-    @idea = Idea.find(id: params[:id])
-    @idea.destroy
+
+  def like
+    @idea = Idea.find(params[:id].to_i)
+    case @idea.quality
+    when "Swill"
+      @idea.quality = "Plausible"
+      @idea.save!
+    when "Plausible"
+      @idea.quality = "Genius"
+      @idea.save!
+    end
+
+    if @idea.save
+      respond_with @idea, location: ""
+    else
+      respond_with({:errors => @idea.errors }, :status => 422, :location => ideas_path)
+    end
+  end
+
+  def dislike
+    @idea = Idea.find(params[:id].to_i)
+    case @idea.quality
+    when "Genius"
+      @idea.quality = "Plausible"
+      @idea.save!
+    when "Plausible"
+      @idea.quality = "Swill"
+      @idea.save!
+    end
+
+    if @idea.save
+      respond_with @idea, location: ""
+    else
+      respond_with({:errors => @idea.errors }, :status => 422, :location => ideas_path)
+    end
+  end
+
+  def destroy
+    # binding.pry
+    @idea = Idea.find(params[:id].to_i)
+    respond_with @idea , location: ""
+    @idea.destroy!
   end
 
 
