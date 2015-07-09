@@ -133,7 +133,7 @@ appendIdeaToDom = function(idea) {
   $('.allIdeas')
   .append(
     "<div class='col s12 m6 idea' data-id=" + $id + ">" + 
-      "<div class='card blue-grey darken-1'>" + 
+      "<div class='card blue-grey darken-1 z-depth-3'>" + 
         "<div class='card-content white-text'>" + 
           "<span class='card-title'>" + $title + "</span>" + 
           "<p><strong>Description:</strong><span class='ideaBody'> " + $body + "</span></p>" + 
@@ -143,7 +143,7 @@ appendIdeaToDom = function(idea) {
         "</div>" + 
         "<div class='card-action'>" + 
           "<a href='' class='deleteIdea'>Delete</a>" + 
-          "<a href='' class='editIdea'>Edit Idea</a>" + 
+          '<a href="#modal1" class="editIdea modal-trigger">Edit Idea</a>' + 
         "</div>" + 
       "</div>" + 
     "</div>"
@@ -151,6 +151,7 @@ appendIdeaToDom = function(idea) {
   bindDeleteIdea();
   bindThumbsUp();
   bindThumbsDown();
+  bindEditIdea();
 };
 
 removeIdeaFromDom = function(id) {
