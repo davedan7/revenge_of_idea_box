@@ -138,7 +138,7 @@ appendIdeaToDom = function(idea) {
           "<span class='card-title'>" + $title + "</span>" + 
           "<p><strong>Description:</strong><span class='ideaBody'> " + $body + "</span></p>" + 
           "<p class='brother'><strong>Quality:</strong> <span class='ideaQuality'>" +  $quality + "</span></p>" + 
-          "<a href='' class='thumbsUp'>Like</a> " + 
+          "<a href='' class='thumbsUp'>Like &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> " + 
           "<a href='' class='thumbsDown'>Dislike</a>" + 
         "</div>" + 
         "<div class='card-action'>" + 
