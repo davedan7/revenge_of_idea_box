@@ -34,9 +34,9 @@ bindThumbsUp = function() {
     var currentQuality = $(this).siblings(".brother").children('.ideaQuality');
 
     if (currentQuality.html() == "Swill") {
-      currentQuality.text("Plausible");
+      currentQuality.html("Plausible");
     } else if (currentQuality.html() == "Plausible") {
-      currentQuality.text("Genius");
+      currentQuality.html("Genius");
     }
 
     $.ajax({

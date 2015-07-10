@@ -32,12 +32,7 @@ class IdeasController < ApplicationController
 
   def like
     @idea = Idea.find(params[:id].to_i)
-    case @idea.quality
-    when "Swill"
-      @idea.quality = "Plausible"
-    when "Plausible"
-      @idea.quality = "Genius"
-    end
+    @idea.like
 
     if @idea.save
       respond_with @idea, location: ""
@@ -48,14 +43,7 @@ class IdeasController < ApplicationController
 
   def dislike
     @idea = Idea.find(params[:id].to_i)
-    case @idea.quality
-    when "Genius"
-      @idea.quality = "Plausible"
-      # @idea.save!
-    when "Plausible"
-      @idea.quality = "Swill"
-      # @idea.save!
-    end
+    @idea.dislike
 
     if @idea.save
       respond_with @idea, location: ""
@@ -79,13 +67,4 @@ class IdeasController < ApplicationController
     end
 
 end
-
-  # def create
-  #   @idea = Idea.new(idea_params)
-  #   if @idea.save
-  #     redirect_to root_path
-  #   else
-  #     render :new
-  #   end
-  # end
 
